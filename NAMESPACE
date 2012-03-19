@@ -1,0 +1,6 @@
+import("methods")
+exportPattern("^[^\\.]")
+#useDynLib( rnaSeqMap, gcoverage, ghistogram, regionmining, splicingind )
+
+
+

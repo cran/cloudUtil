@@ -1,0 +1,10 @@
+483430d612771cf8ef2e1286226f9b91 *DESCRIPTION
+a15a16cf4e42083f1ace4be0a704678c *NAMESPACE
+b250414bd7cad773db768127cd9c9200 *R/cloudUtilPlot.R
+95ff0b3accb16acf4122d22d8f9837df *data/cloudms2.RData
+32000d70fca7d089af22c9a9de41d15a *demo/00Index
+99a41fdd5ee17ad75860e8d641819ba9 *demo/cloudUtil.R
+535a71be3c7ebbd7e23928c6ee666c6b *inst/doc/cloudUtil.Rnw
+1d5addb9eea5274f1eeaf94492791a43 *inst/doc/cloudUtil.pdf
+04a2b7275f57b73bfa72a75555d39a2f *man/cloudUtilPlot.Rd
+ad1baa8c28a09de25aba91502d1119fb *man/cloudms2.Rd

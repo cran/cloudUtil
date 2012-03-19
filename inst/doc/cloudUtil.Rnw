@@ -1,0 +1,170 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
+%\VignetteIndexEntry{cloudUtil primer}
+%\VignetteKeywords{}
+%\VignetteDepends{}
+%\VignettePackage{cloudUtil}
+%documentclass[12pt, a4paper]{article}
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage{hyperref}
+\usepackage[numbers]{natbib}
+\usepackage{color}
+\usepackage[scaled]{helvet}
+\renewcommand*\familydefault{\sfdefault}
+
+\definecolor{NoteGrey}{rgb}{0.96,0.97,0.98}
+
+\textwidth=6.2in
+\textheight=9.5in
+@ \parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-1in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\code}[1]{{\texttt{#1}}}
+
+\author{Christian Panse \and Ermir Qeli}
+\begin{document}
+\title{\code{cloudUtil}: Cloud Utilization Visualizations }
+
+\maketitle
+
+%\fcolorbox{black}{NoteGrey} {
+%\begin{minipage}{13.5cm}
+%\begin{center}
+%\textbf{ Vignette for v.0.0.1 - first try.}
+%\end{center}
+%\end{minipage}
+%}
+
+\tableofcontents
+\newpage
+
+\section{Recent changes and updates}
+None
+
+\section{Introduction}
+
+\code{cloudUtil} is a package for creating comparison plots for
+Cluster, Grid and Cloud utilization data. Under utilization data we understand collected 
+accounting data measuring the job execution time in the above mentioned environments.
+
+The idea behind this package is to create a single visualization of such data that has the following
+main features:
+\begin{itemize}
+\item gives an overview over the compute system utilization within a certain time frame
+\item allows the comparison of job lengths between different platforms giving thus hints on how well the respective job queues function e.g. how efficient the queue of Sun Grid Engine is performing
+\item allows the integration of replicates within the same visualization
+\item allows the comparison on both absolute and relative timescales
+\end{itemize}
+
+The functionality of \code{cloudUtilPlot} function was first used in \cite{am2010}.
+
+\section{Data preparation}
+\label{lab:datapreparation}
+The package includes sample accounting data for demonstration purposes.
+These data were collected by comparing the running times of several hundred compute jobs:
+each one of these jobs performs peptide-spectrum matching in proteomics  
+(data published in \cite{17450130}).
+
+The fragment below shows a random extract from the dataset provided in the package:
+
+<<eval=TRUE>>=
+library(cloudUtil)
+data(cloudms2)
+cloudms2[sort(sample(nrow(cloudms2),10)),c(1,5,6,15)]
+@
+
+The attributes of interest are \texttt{CLOUD}, \texttt{BEGIN\_PREPROCESS}, \texttt{END\_PREPROCESS}, and  \texttt{id}.
+Additionally, it is also possible to use accounting data collected from other sources e.g. 
+Sun Grid Engine accounting data \cite{gridscheduler}.
+
+\section{Analysis}
+
+The code extract below creates a plot of the data shown in Section \ref{lab:datapreparation}:
+<<eval=TRUE>>=
+hist(cloudms2$END_PREPROCESS - cloudms2$BEGIN_PREPROCESS,100)
+## 
+boxplot((cloudms2$END_PROCESS-cloudms2$BEGIN_PROCESS)/3600~cloudms2$CLOUD, 
+    main="process time",
+    ylab="time [hours]")
+   
+## 
+throughput<-cloudms2$MZXMLFILESIZE*10^-6/
+(cloudms2$END_COPYINPUT-cloudms2$BEGIN_COPYINPUT)
+
+boxplot(throughput~cloudms2$CLOUD, 
+    main="copy input network throughput",
+    ylab="MBytes/s")
+## 
+
+cloudUtilPlot(begin=cloudms2$BEGIN_PROCESS, 
+    end=cloudms2$END_PROCESS, 
+    id=cloudms2$id, 
+    group=cloudms2$CLOUD)
+@
+
+Transparency through alpha blending allows furthermore
+to compare several plots with each other. An example is 
+given in the code fragment below:
+
+<<eval=TRUE>>=
+#green
+col.amazon<-rgb(0.1,0.8,0.1,alpha=0.2)
+col.amazon2<-rgb(0.1,0.8,0.1,alpha=0.2)
+
+#blue
+col.fgcz<-rgb(0.1,0.1,0.8,alpha=0.2)
+col.fgcz2<-rgb(0.1,0.1,0.5,alpha=0.2)
+
+#red
+col.uzh<-rgb(0.8,0.1,0.1,alpha=0.2)
+col.uzh2<-rgb(0.5,0.1,0.1,alpha=0.2)
+
+cm<-c(col.amazon, col.amazon2, col.fgcz, col.fgcz2, col.uzh, col.uzh2)
+
+jpeg("cloudms2Fig.jpg", 640, 640)
+op<-par(mfrow=c(2,1))
+cloudUtilPlot(begin=cloudms2$BEGIN_PROCESS, 
+    end=cloudms2$END_PROCESS, 
+    id=cloudms2$id, 
+    group=cloudms2$CLOUD, 
+    colormap=cm, 
+    normalize=FALSE, 
+    plotConcurrent=TRUE); 
+
+cloudUtilPlot(begin=cloudms2$BEGIN_PROCESS, 
+    end=cloudms2$END_PROCESS, 
+    id=cloudms2$id, 
+    group=cloudms2$CLOUD, 
+    colormap=cm, 
+    normalize=TRUE, 
+    plotConcurrent=TRUE,
+    plotConcurrentMax=TRUE)
+dev.off()
+@
+
+
+The output of the above listed R session is shown in 
+Figure \ref{fig:cloudms2}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\columnwidth]{cloudms2Fig.jpg}
+\caption{\code{cloudUtilPlot} visualization for the \code{cloudms2} data set. \label{fig:cloudms2} On the graphics each horizontal line indicates the start and the end of one single job. Color is used for classifying the different groups. On the upper plot the time of each group was not normalized. The visualization on the bottom on the other side uses normalized time scales whichs help to compare the compute systems. Tranparent colors were used to dial with the overplotting. The solid lines on the bottom plot show the total number of concurrently running jobs. The squares on the solid lines indicate the maxima on the respective system. The user can make use of all R graphic devices.}
+\end{figure}
+
+
+\begin{thebibliography}{99}
+\bibitem {am2010} Aleksandar Markovic, Investigation of economical and practical aspects of commercial cloud computing for Life Sciences, March 2010. (diplomathesis) 
+\bibitem {17450130} Erich Brunner et al., A high-quality catalog of the Drosophila melanogaster proteome., Nat Biotechnol. 2007 May;25(5):576-83. Epub 2007 Apr 22., (pubmed ID:17450130).
+\bibitem {gridscheduler} \url{https://sourceforge.net/projects/gridscheduler/}, March 2012.
+\end{thebibliography}
+
+\end{document}
