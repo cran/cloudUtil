@@ -6,31 +6,51 @@
 \title{Cloud Utilization Plot}
 
 \description{
-    On the utilization graphic each horizontal line indicates the start and the end of one job. 
-    Color groups different runs.
+    On the utilization graphic each horizontal line indicates the 
+start and the end of one job.  Color groups different runs.
 }
 
 \usage{
 
-cloudUtilPlot(group, begin, end, id, colormap, normalize, plotConcurrent, plotConcurrentMax, main)
-
+cloudUtilPlot(group, begin, end, id, 
+    	colormap, 
+	normalize, 
+	plotConcurrent, 
+	plotConcurrentMax, 
+	main)
 }
 
 \arguments{
-  \item{begin}{ a time series of the starting events; the time format is unix time stamp (seconds since Jan 01 1970).}
+
+  \item{begin}{ a time series of the starting events; the time format is unix 
+time stamp (seconds since Jan 01 1970).}
+
   \item{end}{ a time series of the corresponding ending events. }
+
   \item{id}{ identifyer of each event. }
+
   \item{group}{ group of each event. }
+
   \item{main}{ an overall title for the plot. }
-  \item{colormap}{ color vector for the data. default is the rainbow colormap having as much colors as we have groups. }
-  \item{normalize}{ normalizes the time in a way that the groups are relative to each other; default is set to TRUE. }
-  \item{plotConcurrent}{ plot concurrent running tasks as solid lines; default is set to TRUE. }
-  \item{plotConcurrentMax}{ plot maximum of concurrent running tasks; default is set to FALSE. }
+
+  \item{colormap}{ color vector for the data. default is the rainbow colormap 
+having as much colors as we have groups. }
+
+  \item{normalize}{ normalizes the time in a way that the groups are relative 
+to each other; default is set to TRUE. }
+
+  \item{plotConcurrent}{ plot concurrent running tasks as solid lines; 
+default is set to TRUE. }
+
+  \item{plotConcurrentMax}{ plot maximum of concurrent running tasks; default 
+is set to FALSE. }
+
 }
 
 \details{
-The \code{cloudUtilPlot} function reqires the four agrguments \code{begin}, \code{end}, \code{group}, and \code{id}.
-All other arguments are optional.
+The \code{cloudUtilPlot} function reqires the four arguments \code{begin}, 
+\code{end}, \code{group}, and \code{id}. All other arguments are optional.
+
 }
 
 \author{

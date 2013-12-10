@@ -58,20 +58,23 @@ cloudUtil.CopyInputTime<-function(cloudms2){
     summary(p.lm)
 }
 
+cm<-cloudUtilDemoColorMap()
+
 cloudUtil.ProcessTime(cloudms2)
 cloudUtil.CopyInputTime(cloudms2)
 
 
 boxplot((cloudms2$END_PROCESS-cloudms2$BEGIN_PROCESS)/3600~cloudms2$CLOUD, 
     main="process time",
+    col=cm,
     ylab="time [hours]")
 
 boxplot(cloudms2$MZXMLFILESIZE*10^-6/(cloudms2$END_COPYINPUT-cloudms2$BEGIN_COPYINPUT)~cloudms2$CLOUD, 
     main="copy input network throughput",
+    col=cm,
     ylab="MBytes/s")
 
 
-cm<-cloudUtilDemoColorMap()
 cloudUtilPlot(begin=cloudms2$BEGIN_PROCESS, 
         end=cloudms2$END_PROCESS, 
         id=cloudms2$id, 
