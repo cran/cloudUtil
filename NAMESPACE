@@ -1,4 +1,6 @@
 import("methods")
+importFrom("grDevices", "rainbow")
+importFrom("graphics", "abline", "lines", "plot", "points", "segments", "text")
 exportPattern("^[^\\.]")
 #useDynLib( rnaSeqMap, gcoverage, ghistogram, regionmining, splicingind )
 

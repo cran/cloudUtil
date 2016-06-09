@@ -24,9 +24,10 @@ jobs.
 
 \references{
 
-      \url{http://fgcz-data.uzh.ch/~cpanse/CRAN/2011-10-24--pCloud.pdf}
+      \url{http://fgcz-transfer.uzh.ch/~cpanse/2011-10-24--pCloud.pdf}
 
       \url{http://www.nature.com/nbt/journal/v25/n5/abs/nbt1300.html}
+
 
 }
 \keyword{datasets}

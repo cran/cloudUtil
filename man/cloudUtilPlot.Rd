@@ -6,8 +6,10 @@
 \title{Cloud Utilization Plot}
 
 \description{
+
     On the utilization graphic each horizontal line indicates the 
 start and the end of one job.  Color groups different runs.
+
 }
 
 \usage{
@@ -48,13 +50,23 @@ is set to FALSE. }
 }
 
 \details{
+
 The \code{cloudUtilPlot} function reqires the four arguments \code{begin}, 
 \code{end}, \code{group}, and \code{id}. All other arguments are optional.
 
 }
 
+\references{
+
+	Tyanko Aleksiev, Simon Barkow, Peter Kunszt, Sergio Maffioletti, Riccardo Murri, Christian Panse (2013),
+	VM-MAD: a cloud/cluster software for service-oriented academic environments,
+	\url{https://arxiv.org/abs/1302.2529}.
+
+}
 \author{
+
    Christian Panse
+
 }
 \examples{
     data(cloudms2)
@@ -88,4 +100,5 @@ The \code{cloudUtilPlot} function reqires the four arguments \code{begin},
         colormap=cm, 
         normalize=TRUE, 
         plotConcurrent=TRUE)
+
 }
